@@ -10,6 +10,8 @@ import neotech.test.ds.DataSource;
 
 public class TimestempWriter {
 
+    private static final long SECOND = TimeUnit.SECONDS.toMillis(1);
+
     private final LinkedBlockingQueue<Date> queue = new LinkedBlockingQueue<>();
 
     private DataSource ds;
@@ -27,7 +29,7 @@ public class TimestempWriter {
 
     private void startWriterThread() {
         Timer timer = new Timer();
-        timer.schedule(new Tick(), 0, TimeUnit.SECONDS.toMillis(1));
+        timer.schedule(new Tick(), 0, SECOND);
     }
 
     public void writeToDs() {
@@ -37,11 +39,19 @@ public class TimestempWriter {
             try {
                 Date currentElement = queue.take();
                 while (!ds.saveTimestamp(currentElement)) {
-                    System.err.println("Failed to write imestamp: " + currentElement);
+                    System.err.println("Failed to write timestemp: " + currentElement);
+                    waitForASecond();
                 }
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    private void waitForASecond() {
+        try {
+            Thread.sleep(SECOND);
+        } catch (InterruptedException e) {
         }
     }
 
