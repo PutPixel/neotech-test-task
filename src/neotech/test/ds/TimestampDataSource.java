@@ -77,7 +77,8 @@ public class TimestampDataSource implements DataSource {
     @Override
     public List<Date> readTimestamps() {
         try (Connection connection = getConnection()) {
-            ResultSet resultSet = connection.prepareStatement("SELECT timestamp FROM  test.test").getResultSet();
+            PreparedStatement prepareStatement = connection.prepareStatement("SELECT `timestamp` FROM  test.test");
+            ResultSet resultSet = prepareStatement.executeQuery();
             List<Date> result = new ArrayList<>();
             while (resultSet.next()) {
                 result.add(new Date(resultSet.getTimestamp(1).getTime()));
