@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.mysql.fabric.jdbc.FabricMySQLDataSource;
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 public class TimestampDataSource implements DataSource {
 
-    private FabricMySQLDataSource ds;
+    private MysqlDataSource ds;
 
     public TimestampDataSource() {
         String hostname = System.getProperty("ds.hostname");
@@ -22,7 +22,7 @@ public class TimestampDataSource implements DataSource {
         String user = System.getProperty("ds.username");
         String password = System.getProperty("ds.password");
 
-        ds = new FabricMySQLDataSource();
+        ds = new MysqlDataSource();
         ds.setServerName(hostname);
         ds.setPort(Integer.valueOf(port));
         ds.setUser(user);
@@ -45,7 +45,7 @@ public class TimestampDataSource implements DataSource {
         Connection rawConnection = getConnection();
         Statement statement = rawConnection.createStatement();
         statement.executeUpdate(
-                "create table if not exists test ( 'timestamp' DATETIME NOT NULL, PRIMARY KEY ('timestamp'), UNIQUE INDEX 'timestamp_UNIQUE' ('timestamp' ASC))");
+                "create table if not exists test ( `timestamp` DATETIME NOT NULL, PRIMARY KEY (`timestamp`), UNIQUE INDEX `timestamp_UNIQUE` (`timestamp` ASC))");
         statement.close();
         rawConnection.close();
     }

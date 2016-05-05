@@ -37,6 +37,7 @@ public class TimestempWriter {
             try {
                 Date currentElement = queue.take();
                 while (!ds.saveTimestamp(currentElement)) {
+                    System.err.println("Failed to write imestamp: " + currentElement);
                 }
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
